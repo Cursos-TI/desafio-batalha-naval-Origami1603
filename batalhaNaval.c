@@ -4,10 +4,36 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
+
 #define TAMANHO_TABULEIRO 10
 #define TAMANHO_NAVIO 3
 #define VALOR_AGUA 0
 #define VALOR_NAVIO 3
+
+// Função para verificar se pode posicionar o navio sem sair do tabuleiro ou sobrepor
+int podePosicionar(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna, int direcaoLinha, int direcaoColuna) {
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        int novaLinha = linha + i * direcaoLinha;
+        int novaColuna = coluna + i * direcaoColuna;
+
+        if (novaLinha < 0 || novaLinha >= TAMANHO_TABULEIRO || novaColuna < 0 || novaColuna >= TAMANHO_TABULEIRO)
+            return 0; // Fora do tabuleiro
+        if (tabuleiro[novaLinha][novaColuna] != VALOR_AGUA)
+            return 0; // Sobreposição
+    }
+    return 1;
+}
+
+// Função para posicionar o navio no tabuleiro
+void posicionarNavio(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna, int direcaoLinha, int direcaoColuna) {
+    for (int i = 0; i < TAMANHO_NAVIO; i++) {
+        int novaLinha = linha + i * direcaoLinha;
+        int novaColuna = coluna + i * direcaoColuna;
+        tabuleiro[novaLinha][novaColuna] = VALOR_NAVIO;
+    }
+}
+
+
 
 int main() {
     // Nível Novato - Posicionamento dos Navios
@@ -15,53 +41,51 @@ int main() {
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
     // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
-    // Matriz do tabuleiro (10x10) inicializada com água (0)
+
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0};
 
-    // Coordenadas do navio horizontal (linha fixa, coluna crescente)
-    int linhaHorizontal = 2;   // Linha 3
-    int colunaHorizontal = 1;  // Coluna B
-
-    // Coordenadas do navio vertical (coluna fixa, linha crescente)
-    int linhaVertical = 4;     // Linha 5
-    int colunaVertical = 6;    // Coluna G
-
-    // Validação de limites para o navio horizontal
-    if (colunaHorizontal + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
-        for (int i = 0; i < TAMANHO_NAVIO; i++) {
-            if (tabuleiro[linhaHorizontal][colunaHorizontal + i] != VALOR_AGUA) {
-                printf("Erro: Sobreposição detectada no navio horizontal.\n");
-                return 1;
-            }
-            tabuleiro[linhaHorizontal][colunaHorizontal + i] = VALOR_NAVIO;
-        }
-    } else {
-        printf("Erro: Navio horizontal ultrapassa os limites do tabuleiro.\n");
+    // Navio 1 – Horizontal (linha 2, colunas 1 a 3 → B3 a D3)
+    if (podePosicionar(tabuleiro, 2, 1, 0, 1))
+        posicionarNavio(tabuleiro, 2, 1, 0, 1);
+    else {
+        printf("Erro ao posicionar o Navio 1.\n");
         return 1;
     }
 
-    // Validação de limites para o navio vertical
-    if (linhaVertical + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
-        for (int i = 0; i < TAMANHO_NAVIO; i++) {
-            if (tabuleiro[linhaVertical + i][colunaVertical] != VALOR_AGUA) {
-                printf("Erro: Sobreposição detectada no navio vertical.\n");
-                return 1;
-            }
-            tabuleiro[linhaVertical + i][colunaVertical] = VALOR_NAVIO;
-        }
-    } else {
-        printf("Erro: Navio vertical ultrapassa os limites do tabuleiro.\n");
+    // Navio 2 – Vertical (coluna 6, linhas 4 a 6 → G5 a G7)
+    if (podePosicionar(tabuleiro, 4, 6, 1, 0))
+        posicionarNavio(tabuleiro, 4, 6, 1, 0);
+    else {
+        printf("Erro ao posicionar o Navio 2.\n");
         return 1;
     }
 
-    // Impressão do cabeçalho de colunas (A a J)
+    // Navio 3 – Diagonal principal (linha 0, coluna 0 → A1 a C3)
+    // Navio 3 – Diagonal principal (linha 6, coluna 0 → A7 a C9)
+    if (podePosicionar(tabuleiro, 6, 0, 1, 1))
+    posicionarNavio(tabuleiro, 6, 0, 1, 1);
+
+    else {
+        printf("Erro ao posicionar o Navio 3.\n");
+        return 1;
+    }
+
+    // Navio 4 – Diagonal secundária (linha 0, coluna 9 → J1 a H3)
+    if (podePosicionar(tabuleiro, 0, 9, 1, -1))
+        posicionarNavio(tabuleiro, 0, 9, 1, -1);
+    else {
+        printf("Erro ao posicionar o Navio 4.\n");
+        return 1;
+    }
+
+    // Impressão do cabeçalho (A a J)
     printf("\n     ");
     for (int col = 0; col < TAMANHO_TABULEIRO; col++) {
         printf(" %c ", 'A' + col);
     }
     printf("\n");
 
-    // Impressão do tabuleiro com numeração das linhas
+    // Impressão do tabuleiro com linhas numeradas
     for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
         printf("%2d |", i + 1);
         for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
@@ -69,6 +93,7 @@ int main() {
         }
         printf("\n");
     }
+
 
 
     
