@@ -4,12 +4,74 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
+#define TAMANHO_TABULEIRO 10
+#define TAMANHO_NAVIO 3
+#define VALOR_AGUA 0
+#define VALOR_NAVIO 3
+
 int main() {
     // Nível Novato - Posicionamento dos Navios
     // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
     // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
+    // Matriz do tabuleiro (10x10) inicializada com água (0)
+    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0};
+
+    // Coordenadas do navio horizontal (linha fixa, coluna crescente)
+    int linhaHorizontal = 2;   // Linha 3
+    int colunaHorizontal = 1;  // Coluna B
+
+    // Coordenadas do navio vertical (coluna fixa, linha crescente)
+    int linhaVertical = 4;     // Linha 5
+    int colunaVertical = 6;    // Coluna G
+
+    // Validação de limites para o navio horizontal
+    if (colunaHorizontal + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linhaHorizontal][colunaHorizontal + i] != VALOR_AGUA) {
+                printf("Erro: Sobreposição detectada no navio horizontal.\n");
+                return 1;
+            }
+            tabuleiro[linhaHorizontal][colunaHorizontal + i] = VALOR_NAVIO;
+        }
+    } else {
+        printf("Erro: Navio horizontal ultrapassa os limites do tabuleiro.\n");
+        return 1;
+    }
+
+    // Validação de limites para o navio vertical
+    if (linhaVertical + TAMANHO_NAVIO <= TAMANHO_TABULEIRO) {
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linhaVertical + i][colunaVertical] != VALOR_AGUA) {
+                printf("Erro: Sobreposição detectada no navio vertical.\n");
+                return 1;
+            }
+            tabuleiro[linhaVertical + i][colunaVertical] = VALOR_NAVIO;
+        }
+    } else {
+        printf("Erro: Navio vertical ultrapassa os limites do tabuleiro.\n");
+        return 1;
+    }
+
+    // Impressão do cabeçalho de colunas (A a J)
+    printf("\n     ");
+    for (int col = 0; col < TAMANHO_TABULEIRO; col++) {
+        printf(" %c ", 'A' + col);
+    }
+    printf("\n");
+
+    // Impressão do tabuleiro com numeração das linhas
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        printf("%2d |", i + 1);
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            printf(" %d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+
+
+    
     // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
     // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
     // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
